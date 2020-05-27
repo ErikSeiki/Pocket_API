@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Supermercado.API.Domain.Models;
 using Supermercado.API.Domain.Services;
+using Supermercado.API.Exceptions;
+using Supermercado.API.Exceptions.CategoriaException;
 
 namespace Supermercado.API.Controllers
 {
@@ -12,60 +14,94 @@ namespace Supermercado.API.Controllers
     public class CategoriasController : Controller
     {
         private readonly ICategoriaService _categoriaService;
-
-        public CategoriasController(ICategoriaService categoriaService) 
+        
+        public CategoriasController(ICategoriaService categoriaService)
         {
-            _categoriaService = categoriaService;
+            _categoriaService = categoriaService;   
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetAllAsync()
+        public async Task<IEnumerable<Categoria>> GetAllAsync()
         {
-            var categorias = await _categoriaService.ListAsync();
-            return Ok(categorias);
+   
+            return await _categoriaService.ListAsync();
         }
-        
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Categoria>> GetByIdAsync(int id)
+        public async Task<ActionResult<Categoria>> GetByIdAsync(Guid id)
         {
-            var categoria = await _categoriaService.GetByIdAsync(id);
-            
-            //return StatusCode(305, "");
 
-            if (categoria == null)
-                return NotFound("Nenhuma categoria encontrada");
+            try
+            {
+                var categoria = await _categoriaService.GetByIdAsync(id);
 
-            return Ok(categoria);
+                return Ok(categoria);
+            }
+            catch (ParametroInvalidoCategoriaException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (NaoEncontradoCategoriaException ex) 
+            {
+                return NotFound(ex.Message); 
+            }
         }
 
         [HttpPost("")]
         public async Task<ActionResult> AddAsync([FromBody] Categoria categoria)
         {
-            await _categoriaService.AddAsync(categoria);
+            try
+            {
+                await _categoriaService.AddAsync(categoria);
+                return Created("Criado com sucesso", categoria.Nome + " criado com sucesso!");   
+            }
+            catch (ParametroInvalidoCategoriaException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ExistenteCategoriaException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            return Created("Criado com sucesso", categoria);
+        }
+
+        [HttpPut("")]
+        public async Task<ActionResult> UpdateAsync([FromBody] Categoria categoria)
+        {
+            try
+            {
+                await _categoriaService.UpdateAsync(categoria);
+                return Ok(categoria.Nome + " Atuzalido com sucesso");
+            }
+            catch (ParametroInvalidoCategoriaException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (NaoEncontradoCategoriaException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Remove( int id)
+        public async Task<ActionResult> RemoveAsync(Guid id)
         {
-            var categoria = await _categoriaService.GetByIdAsync(id);
+            try
+            {
+                await _categoriaService.RemoveAsync(id);
+                return Ok("Removido com sucesso");
+            }
+            catch (ParametroInvalidoCategoriaException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (NaoEncontradoCategoriaException ex)
+            {
+                return NotFound(ex.Message);
+
+            }
             
-            if (categoria == null) 
-                return NotFound("Nenhuma categoria encontrada");
-
-            _categoriaService.Remove(categoria);
-
-            return Ok("Removido com sucesso");
-        }
-
-
-        [HttpPut("")]
-        public async Task<ActionResult> Update([FromBody] Categoria categoria)
-        {
-            _categoriaService.Update(categoria);
-
-            return Ok("Atuzalido com sucesso");
         }
     }
 }

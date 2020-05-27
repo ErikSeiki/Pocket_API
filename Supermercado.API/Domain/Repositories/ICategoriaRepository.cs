@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Supermercado.API.Domain.Repositories
 {
-    public interface ICategoriaRepository
+    public interface ICategoriaRepository 
     {
         Task<IEnumerable<Categoria>> ListAsync();
+        Task<Categoria> GetByIdAsync(Guid id);
         Task AddAsync(Categoria categoria);
-        Task<Categoria> FindByIdAsync(int id);
-        void Update(Categoria categoria);
-        void Remove(Categoria categoria);
+        Task UpdateAsync(Categoria categoria);
+        Task RemoveAsync(Categoria categoria);
+
     }
 }

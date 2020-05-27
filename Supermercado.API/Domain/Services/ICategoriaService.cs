@@ -19,25 +19,27 @@ namespace Supermercado.API.Domain.Services
         /// </summary>
         /// <param name="id">ID da categoria</param>
         /// <returns>Categoria encontrada</returns>
-        Task<Categoria> GetByIdAsync(int id);
+        Task<Categoria> GetByIdAsync(Guid id);
 
         /// <summary>
-        /// Adicionar uma nova categoria
+        /// Adiciona uma nova categoria
+        /// </summary>
+        /// <param name="categoria">Objeto (instancia) do tipo Categoria</param>
+        /// <returns>Categoria adicionado</returns>
+        Task<Categoria> AddAsync(Categoria categoria);
+
+        /// <summary>
+        /// Atualiza uma categoria
         /// </summary>
         /// <param name="categoria">Objeto (Instancia) do tipo Categoria</param>
-        /// <returns></returns>
-        Task AddAsync(Categoria categoria);
+        Task UpdateAsync(Categoria categoria);
 
         /// <summary>
         /// Remover uma categoria
         /// </summary>
-        /// <param name="categoria">Objeto (Instancia) do tipo Categoria</param>
-        void Remove(Categoria categoria);
+        /// <param name="categoria">ID da Categoria</param>
+        Task RemoveAsync(Guid id);
 
-        /// <summary>
-        /// Atualizar uma categoria
-        /// </summary>
-        /// <param name="categoria">Objeto (Instancia) do tipo Categoria</param>
-        void Update(Categoria categoria);
+
     }
 }

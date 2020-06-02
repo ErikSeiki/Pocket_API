@@ -11,7 +11,7 @@ namespace Supermercado.API.Domain.Repositories
         Task<IEnumerable<Categoria>> ListAsync();
         Task<Categoria> GetByIdAsync(Guid id);
         Task AddAsync(Categoria categoria);
-        Task UpdateAsync(Categoria categoria);
+        Task UpdateAsync(Guid id, Categoria categoria);
         Task RemoveAsync(Categoria categoria);
 
     }

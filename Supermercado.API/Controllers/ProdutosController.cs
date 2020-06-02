@@ -7,6 +7,7 @@ using Supermercado.API.Domain.Services;
 using Supermercado.API.Domain.Models;
 using System.Runtime.CompilerServices;
 using Supermercado.API.Exceptions.ProdutoException;
+using Supermercado.API.Exceptions;
 
 namespace Supermercado.API.Controllers
 {
@@ -55,18 +56,22 @@ namespace Supermercado.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (ExistenteProdutoException ex) 
+            catch (ExistenteProdutoException ex)
             {
                 return BadRequest(ex.Message);
             }
+            catch (NaoEncontradoCategoriaException ex) 
+            {
+                return Conflict(ex.Message);
+            }
         }
 
-        [HttpPut("")]
-        public async Task<ActionResult> UpdateAsync([FromBody] Produto produto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateAsync( Guid id,[FromBody] Produto produto)
         {
             try
             {
-                await _produtoService.UpdateAsync(produto);
+                await _produtoService.UpdateAsync(id, produto);
                 return Ok(produto.Nome + " Atuzalido com sucesso");
             }
             catch (ParametroInvalidoProdutoException ex) 

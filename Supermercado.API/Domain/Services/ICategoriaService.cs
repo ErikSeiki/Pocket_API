@@ -31,13 +31,16 @@ namespace Supermercado.API.Domain.Services
         /// <summary>
         /// Atualiza uma categoria
         /// </summary>
-        /// <param name="categoria">Objeto (Instancia) do tipo Categoria</param>
-        Task UpdateAsync(Categoria categoria);
+        /// <param name="id">ID da categoria</param>
+        /// <param name="categoria">Objeto (instancia) do tipo Categoria</param>
+        /// <returns></returns>
+        Task UpdateAsync(Guid id, Categoria categoria);
 
         /// <summary>
         /// Remover uma categoria
         /// </summary>
-        /// <param name="categoria">ID da Categoria</param>
+        /// <param name="id">ID da categoria</param>
+        /// <returns></returns>
         Task RemoveAsync(Guid id);
 
 

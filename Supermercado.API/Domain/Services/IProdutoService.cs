@@ -31,15 +31,16 @@ namespace Supermercado.API.Domain.Services
         /// <summary>
         /// Atualiza um produto 
         /// </summary>
-        /// <param name="produto"></param>
+        /// <param name="id">ID do Produto</param>
+        /// <param name="produto">Objeto (instancia) do tipo produto</param>
         /// <returns>Objeto (instancia) do tipo produto</returns>
-        Task UpdateAsync(Produto produto);
+        Task UpdateAsync(Guid id, Produto produto);
 
         /// <summary>
         /// Remove um produto
         /// </summary>
-        /// <param name="guid">ID do Produto</param>
+        /// <param name="id">ID do Produto</param>
         /// <returns></returns>
-        Task RemoveAsync(Guid guid);
+        Task RemoveAsync(Guid id);
     }
 }

@@ -12,6 +12,6 @@ namespace Supermercado.API.Domain.Repositories
         Task<Produto> GetByIdAsync(Guid id);
         Task AddAsync(Produto produto);
         Task RemoveAsync(Produto produto);
-        Task UpdateAsync(Produto produto);
+        Task UpdateAsync(Guid id, Produto produto);
     }
 }

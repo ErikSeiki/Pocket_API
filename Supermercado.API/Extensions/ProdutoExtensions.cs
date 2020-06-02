@@ -12,7 +12,7 @@ namespace Supermercado.API.Extensions
         public static bool IsValid(this Produto produto) 
         {
             return produto == null || produto.Id == null || produto.Nome == null || "".Equals(produto.Nome)
-                || produto.CategoriaId.Equals(Guid.Empty) || produto.QuantidadePacote <= 0 || produto.UnidadeMedida.IsValid();
+                || produto.QuantidadePacote <= 0 || produto.UnidadeMedida.IsValid() || produto.CategoriaId.Equals(Guid.Empty);
         }
     }
 }

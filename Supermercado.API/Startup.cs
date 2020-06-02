@@ -25,6 +25,7 @@ namespace Supermercado.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddDbContext<AppDbContext>(options => {
                 options.UseInMemoryDatabase("supermercado-api-in-memory");
             });

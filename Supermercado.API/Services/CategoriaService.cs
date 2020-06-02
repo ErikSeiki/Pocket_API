@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using Supermercado.API.Domain.Models;
+﻿using Supermercado.API.Domain.Models;
 using Supermercado.API.Domain.Repositories;
 using Supermercado.API.Domain.Services;
 using Supermercado.API.Exceptions;
@@ -7,8 +6,6 @@ using Supermercado.API.Exceptions.CategoriaException;
 using Supermercado.API.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Supermercado.API.Services
@@ -59,12 +56,12 @@ namespace Supermercado.API.Services
             return categoria;
         }
 
-        public async Task UpdateAsync(Categoria categoria)
+        public async Task UpdateAsync(Guid id, Categoria categoria)
         {
-            if (categoria.IsValid() || categoria.Id.Equals(Guid.Empty))
+            if (categoria.IsValid() || id.Equals(Guid.Empty))
                 throw new ParametroInvalidoCategoriaException(parametro_invalido_menssagem);
             
-            await _categoriaRepository.UpdateAsync(categoria);
+            await _categoriaRepository.UpdateAsync(id, categoria);
         }
 
         public async Task RemoveAsync(Guid id)

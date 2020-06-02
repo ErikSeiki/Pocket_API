@@ -38,7 +38,7 @@ namespace Supermercado.API.Persistence.Repositories
 
         }
 
-        public async Task UpdateAsync(Categoria categoria)
+        /*public async Task UpdateAsync(Categoria categoria)
         {
             Categoria categoriaExistente = await _context.Categorias.AsNoTracking().SingleAsync(cat => cat.Id == categoria.Id);
 
@@ -50,11 +50,11 @@ namespace Supermercado.API.Persistence.Repositories
 
             _context.Entry(categoria).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-        }
+        }*/
 
-       /* public async Task UpdateAsync(Categoria categoria)
+       public async Task UpdateAsync(Guid id, Categoria categoria)
         {
-            Categoria categoriaExistente = await this.GetByIdAsync(categoria.Id);
+            Categoria categoriaExistente = await this.GetByIdAsync(id);
 
 
             if (categoriaExistente == null)
@@ -67,7 +67,7 @@ namespace Supermercado.API.Persistence.Repositories
             categoriaExistente.Nome = categoria.Nome;
 
             await _context.SaveChangesAsync();
-        }*/
+        }
 
         public async Task RemoveAsync(Categoria categoria)
         {

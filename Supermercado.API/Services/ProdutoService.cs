@@ -15,13 +15,14 @@ namespace Supermercado.API.Services
         private const string parametro_invalido_menssagem = "Parametro Invalido";
         private const string produto_existente_menssagem = "Produto Já Existe";
         private const string nenhum_produto_encontrado_menssagem = "Nenhum Produto Encontrado";
-
-
+        
         private readonly IProdutoRepository _produtoRepository;
+        private readonly ICategoriaService _categoriaService;
 
-        public ProdutoService(IProdutoRepository produtoRepository)
+        public ProdutoService(IProdutoRepository produtoRepository, ICategoriaService categoriaService)
         {
             _produtoRepository = produtoRepository;
+            _categoriaService = categoriaService;
         }
 
         public async Task<IEnumerable<Produto>> ListAsync()
@@ -52,17 +53,19 @@ namespace Supermercado.API.Services
             if (!produtoExistente.IsValid())
                 throw new ExistenteProdutoException(produto_existente_menssagem);
 
+            await _categoriaService.GetByIdAsync(produto.CategoriaId);
+           
             await _produtoRepository.AddAsync(produto);
             
             return produto;
         }
 
-        public async Task UpdateAsync(Produto produto)
+        public async Task UpdateAsync(Guid id, Produto produto)
         {
-            if (produto.IsValid() || produto.Id.Equals(Guid.Empty))
+            if (produto.IsValid() || id.Equals(Guid.Empty))
                 throw new ParametroInvalidoProdutoException(parametro_invalido_menssagem);
 
-            await _produtoRepository.UpdateAsync(produto);
+            await _produtoRepository.UpdateAsync(id, produto);
         }
 
         public async Task RemoveAsync(Guid id)

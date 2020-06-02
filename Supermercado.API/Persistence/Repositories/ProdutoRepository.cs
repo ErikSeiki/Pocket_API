@@ -34,19 +34,43 @@ namespace Supermercado.API.Persistence.Repositories
 
         public async Task AddAsync(Produto produto)
         {
+            //Categoria categoriaExistente = await _context.Categorias.AsNoTracking().SingleAsync(cat => cat.Id == produto.Id);
+            
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Produto produto)
+        /*public async Task UpdateAsync(Guid id, Produto produto)
         {
-            Produto produtoExistente = await _context.Produtos.AsNoTracking().SingleAsync((prod) => prod.Id == produto.Id);
+            Produto produtoExistente = await _context.Produtos.AsNoTracking().SingleAsync((prod) => prod.Id == id);
 
             if (produtoExistente == null) 
                 throw new NaoEncontradoProdutoException(nenhum_produto_encontrado_menssagem);
 
             _context.Entry(produto).State = EntityState.Modified;
             await _context.SaveChangesAsync(); 
+        }*/
+
+        public async Task UpdateAsync(Guid id, Produto produto)
+        {
+            Produto produtoExistente = await this.GetByIdAsync(id);
+
+
+            if (produtoExistente == null)
+            {
+                throw new NaoEncontradoProdutoException(nenhum_produto_encontrado_menssagem);
+            }
+
+            _context.Entry(produtoExistente).State = EntityState.Modified;
+
+            produtoExistente.Nome = produto.Nome;
+            produtoExistente.QuantidadePacote = produto.QuantidadePacote;
+            produtoExistente.UnidadeMedida = produto.UnidadeMedida;
+            produtoExistente.Categoria = produto.Categoria;
+            produtoExistente.CategoriaId = produto.CategoriaId;
+            produtoExistente.Categoria = produto.Categoria;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(Produto produto)

@@ -9,11 +9,13 @@ namespace Supermercado.API.Domain.Models
 {
     public class Categoria
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        [Required]
-        [MaxLength(30)]
+   
+        [Required, MaxLength(30)]
         public string Nome { get; set; }
+
+        //[InverseProperty("Categoria")]
+        public List<Produto> Produtos { get; set; }
     }
 }

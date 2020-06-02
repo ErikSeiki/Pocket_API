@@ -66,12 +66,12 @@ namespace Supermercado.API.Controllers
 
         }
 
-        [HttpPut("")]
-        public async Task<ActionResult> UpdateAsync([FromBody] Categoria categoria)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] Categoria categoria)
         {
             try
             {
-                await _categoriaService.UpdateAsync(categoria);
+                await _categoriaService.UpdateAsync(id, categoria);
                 return Ok(categoria.Nome + " Atuzalido com sucesso");
             }
             catch (ParametroInvalidoCategoriaException ex)

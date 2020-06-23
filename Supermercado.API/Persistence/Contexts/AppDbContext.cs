@@ -17,17 +17,14 @@ namespace Supermercado.API.Persistence.Contexts
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Produto> Produtos { get; set; }
 
-        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
-          {
-              modelBuilder.Entity<Produto>()
-                  .HasOne(prod => prod.Categoria)
-                  .WithMany(cat => cat.Produtos)
-                  .HasForeignKey(produto => produto.CategoriaId);
-          }*/
-
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseInMemoryDatabase("supermercado-api-in-memory");
-        }*/
+            modelBuilder.Entity<Produto>()
+                .HasOne(pro => pro.Categoria)
+                .WithMany(cat => cat.Produtos)
+                .HasForeignKey(pro => pro.CategoriaId)
+                .HasPrincipalKey(cat => cat.Id)
+                .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }

@@ -8,6 +8,7 @@ using Supermercado.API.Domain.Models;
 using System.Runtime.CompilerServices;
 using Supermercado.API.Exceptions.ProdutoException;
 using Supermercado.API.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Supermercado.API.Controllers
 {
@@ -15,6 +16,7 @@ namespace Supermercado.API.Controllers
     public class ProdutosController: Controller
     {
         private readonly IProdutoService _produtoService;
+        private const string nenhuma_categoria_encontrada_menssagem = "Nenhuma Categoria Encontrada";
 
         public ProdutosController(IProdutoService produtoService) 
         {
@@ -22,7 +24,8 @@ namespace Supermercado.API.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IEnumerable<Produto>> ListAsync() {
+        public async Task<IEnumerable<Produto>> ListAsync()
+        {
             return await _produtoService.ListAsync();
         }
 
@@ -60,7 +63,7 @@ namespace Supermercado.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (NaoEncontradoCategoriaException ex) 
+            catch (DbUpdateException ex) 
             {
                 return Conflict(ex.Message);
             }
@@ -81,6 +84,10 @@ namespace Supermercado.API.Controllers
             catch (NaoEncontradoProdutoException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (DbUpdateException ex)
+            {
+                return Conflict(nenhuma_categoria_encontrada_menssagem + " " + produto.CategoriaId);
             }
         }
 

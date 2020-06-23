@@ -24,18 +24,24 @@ namespace Supermercado.API.Persistence.Repositories
 
         public async Task<IEnumerable<Produto>> ListAsync()
         {
-            return await _context.Produtos.ToListAsync();
+            return await _context.Produtos
+                .Include(pro => pro.Categoria)
+                .ToListAsync();
+           // return await _context.Produtos.ToListAsync();
         }
 
         public async Task<Produto> GetByIdAsync(Guid id)
         {
-            return await _context.Produtos.FindAsync(id);
+            return await _context.Produtos
+                    .Include(pro => pro.Categoria)
+                    .FirstOrDefaultAsync(pro => pro.Id == id);
+            //return await _context.Produtos.FindAsync(id);
         }
 
         public async Task AddAsync(Produto produto)
         {
             //Categoria categoriaExistente = await _context.Categorias.AsNoTracking().SingleAsync(cat => cat.Id == produto.Id);
-            
+  
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
         }
@@ -68,7 +74,6 @@ namespace Supermercado.API.Persistence.Repositories
             produtoExistente.UnidadeMedida = produto.UnidadeMedida;
             produtoExistente.Categoria = produto.Categoria;
             produtoExistente.CategoriaId = produto.CategoriaId;
-            produtoExistente.Categoria = produto.Categoria;
 
             await _context.SaveChangesAsync();
         }

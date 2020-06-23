@@ -1,8 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace Supermercado.API.Domain.Models
@@ -24,7 +30,7 @@ namespace Supermercado.API.Domain.Models
         public UnidadeMedidaEnum UnidadeMedida { get; set; }
        
         [ForeignKey("Categoria")]
-        public Guid CategoriaId { get; set; }
+        public Guid? CategoriaId { get; set; }  
         
         public Categoria Categoria { get; set; }
     }

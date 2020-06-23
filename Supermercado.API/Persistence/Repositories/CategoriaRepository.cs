@@ -23,12 +23,16 @@ namespace Supermercado.API.Persistence.Repositories
 
         public async Task<IEnumerable<Categoria>> ListAsync()
         {
-            return await _context.Categorias.ToListAsync();
+            return await _context.Categorias
+                .Include(pro => pro.Produtos)
+                .ToListAsync();
         }
 
         public async Task<Categoria> GetByIdAsync(Guid id)
         {
-           return await _context.Categorias.FindAsync(id);
+           return await _context.Categorias
+                .Include(pro => pro.Produtos)
+                .FirstOrDefaultAsync(cat => cat.Id == id);
         }
 
         public async Task AddAsync(Categoria categoria)

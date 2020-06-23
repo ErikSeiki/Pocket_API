@@ -26,9 +26,12 @@ namespace Supermercado.API
         {
             services.AddControllers();
 
-            services.AddDbContext<AppDbContext>(options => {
+            /*services.AddDbContext<AppDbContext>(options => {
                 options.UseInMemoryDatabase("supermercado-api-in-memory");
-            });
+            });*/
+
+            services.AddDbContext<AppDbContext>(
+                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             //Categorias
             services.AddScoped<ICategoriaRepository, CategoriaRepository>();
@@ -37,6 +40,9 @@ namespace Supermercado.API
             //Produtos
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IProdutoService, ProdutoService>();
+
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
